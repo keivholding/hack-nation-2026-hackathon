@@ -55,7 +55,11 @@ CRITICAL RULES:
 - The gradient accent should feel energetic and premium — think neon pink-to-blue or magenta-to-purple sweeps
 - Keep the layout simple — this is a designed poster, not a collage
 - The overall feel should be: premium, bold, confident, modern tech company
-- ${platform === "Instagram" ? "Square (1:1) format" : "Landscape (1.91:1) format — headline on the left, any visual element on the right"}
+- ${
+    platform === "Instagram"
+      ? "Square (1:1) format"
+      : "Landscape (1.91:1) format — headline on the left, any visual element on the right"
+  }
 - The image should look like it was made by a professional design team, not AI`;
 
   try {

@@ -21,7 +21,10 @@ export const linkedinWriter = tool({
   }),
   execute: async ({ concept, brandVoice, goals, numberOfVariations }) => {
     await pushUpdate("writing", "LinkedIn Writer is drafting variations...", [
-      `LinkedIn Writer here — crafting ${numberOfVariations} thought-leadership variations about "${concept.substring(0, 80)}". This takes a moment...`,
+      `LinkedIn Writer here — crafting ${numberOfVariations} thought-leadership variations about "${concept.substring(
+        0,
+        80
+      )}". This takes a moment...`,
     ]);
 
     const result = await generateText({

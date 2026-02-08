@@ -1,6 +1,12 @@
 import app from "./app.js";
 import { ENV } from "./config/env.js";
-import { startBrandAnalysisWorker, startContentCalendarWorker, startPostGenerationWorker, startPersonaGenerationWorker, startSimulationWorker } from "./services/queue.service.js";
+import {
+  startBrandAnalysisWorker,
+  startContentCalendarWorker,
+  startPostGenerationWorker,
+  startPersonaGenerationWorker,
+  startSimulationWorker,
+} from "./services/queue.service.js";
 
 const HOST = "127.0.0.1";
 
@@ -10,7 +16,9 @@ startContentCalendarWorker();
 startPostGenerationWorker();
 startPersonaGenerationWorker();
 startSimulationWorker();
-console.log("✅ Workers started (brand analysis, content calendar, post generation, persona generation, audience simulation)");
+console.log(
+  "✅ Workers started (brand analysis, content calendar, post generation, persona generation, audience simulation)"
+);
 
 app.listen(ENV.PORT, HOST, () => {
   console.log(`🚀 Server is running on http://localhost:${ENV.PORT}`);

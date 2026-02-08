@@ -25,12 +25,16 @@ export const users = pgTable("users", {
   brandAnalysisStatus: varchar("brand_analysis_status", { length: 50 }).default(
     "thinking"
   ), // thinking, discovering, exploring, scanning_visuals, analyzing_identity, understanding, crafting, complete, error
-  calendarGenerationStatus: varchar("calendar_generation_status", { length: 50 }).default("pending"), // pending, planning, organizing, finalizing, complete, error
+  calendarGenerationStatus: varchar("calendar_generation_status", {
+    length: 50,
+  }).default("pending"), // pending, planning, organizing, finalizing, complete, error
   contentPlan: text("content_plan"),
   postingFrequency: varchar("posting_frequency", { length: 100 }),
 
   // Post generation (AI agent)
-  postGenerationStatus: varchar("post_generation_status", { length: 50 }).default("pending"), // pending, orchestrating, researching, writing, designing, finalizing, complete, error
+  postGenerationStatus: varchar("post_generation_status", {
+    length: 50,
+  }).default("pending"), // pending, orchestrating, researching, writing, designing, finalizing, complete, error
   currentAgent: varchar("current_agent", { length: 200 }), // Human-friendly agent activity message
   agentActivityLog: text("agent_activity_log"), // JSON array of conversational log messages
 
@@ -38,10 +42,14 @@ export const users = pgTable("users", {
   selectedTopic: text("selected_topic"), // The topic user chose from content calendar
 
   // Persona generation
-  personaGenerationStatus: varchar("persona_generation_status", { length: 50 }).default("pending"), // pending, generating, complete, error
+  personaGenerationStatus: varchar("persona_generation_status", {
+    length: 50,
+  }).default("pending"), // pending, generating, complete, error
 
   // Audience simulation
-  simulationStatus: varchar("simulation_status", { length: 50 }).default("pending"), // pending, simulating, complete, error
+  simulationStatus: varchar("simulation_status", { length: 50 }).default(
+    "pending"
+  ), // pending, simulating, complete, error
   simulationActivityLog: text("simulation_activity_log"), // JSON array of simulation progress messages
 
   // Post selection & scheduling (step 8)

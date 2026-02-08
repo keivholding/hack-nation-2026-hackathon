@@ -76,8 +76,17 @@ export const startBrandAnalysisWorker = () => {
 
         const scrapeResult = await scraperService.scrapeWebsite(website);
 
+        // If no pages were scraped (e.g. JS-rendered SPA), create a minimal
+        // entry so the AI can still generate a brand profile from the URL alone.
         if (scrapeResult.pages.length === 0) {
-          throw new Error("Failed to scrape website");
+          console.log(
+            `No scrapeable content found for ${website} — proceeding with minimal data`
+          );
+          scrapeResult.pages.push({
+            url: website,
+            title: new URL(website).hostname.replace(/^www\./, ""),
+            content: `Website: ${website}. This site could not be fully scraped (it may be a JavaScript-rendered single-page application). Please infer the brand identity from the URL, domain name, and any available metadata.`,
+          });
         }
 
         console.log(

@@ -90,12 +90,17 @@ export class OpenAIService {
           validatedImages.push(img);
         } else {
           console.log(
-            `Skipping image (unsupported type: ${contentType}): ${img.url.substring(0, 80)}`
+            `Skipping image (unsupported type: ${contentType}): ${img.url.substring(
+              0,
+              80
+            )}`
           );
         }
       } catch {
         // If HEAD fails, skip this image
-        console.log(`Skipping image (HEAD failed): ${img.url.substring(0, 80)}`);
+        console.log(
+          `Skipping image (HEAD failed): ${img.url.substring(0, 80)}`
+        );
       }
     }
 
@@ -118,9 +123,13 @@ export class OpenAIService {
     // Add instructions
     imageContent.push({
       type: "text",
-      text: `I'm analyzing a brand's website. Below are ${imagesToAnalyze.length} images from their site, plus some design signals I extracted from their CSS/HTML.
+      text: `I'm analyzing a brand's website. Below are ${
+        imagesToAnalyze.length
+      } images from their site, plus some design signals I extracted from their CSS/HTML.
 
-CSS Colors found on the site: ${designSignals.cssColors.slice(0, 15).join(", ") || "none detected"}
+CSS Colors found on the site: ${
+        designSignals.cssColors.slice(0, 15).join(", ") || "none detected"
+      }
 Theme color meta tag: ${designSignals.themeColor || "not set"}
 Body classes: ${designSignals.bodyClasses.join(" ") || "none"}
 
@@ -180,10 +189,7 @@ Return ONLY valid JSON. The colorPalette should be the 4-6 most prominent brand 
       const cleaned = text.replace(/```json?\n?|\n?```/g, "").trim();
       const parsed = JSON.parse(cleaned) as BrandVisualProfile;
 
-      console.log(
-        "Visual profile generated:",
-        parsed.overallAesthetic
-      );
+      console.log("Visual profile generated:", parsed.overallAesthetic);
 
       return parsed;
     } catch (error) {

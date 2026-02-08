@@ -571,7 +571,11 @@ async function buildImagePromptFromContent(
   visualProfile?: import("./types.js").BrandVisualProfile
 ): Promise<string> {
   const visualGuidance = visualProfile
-    ? `Brand colors: ${visualProfile.colorPalette.join(", ")}. Color mood: ${visualProfile.colorMood}. Style: ${visualProfile.visualStyle}. Aesthetic: ${visualProfile.overallAesthetic}.`
+    ? `Brand colors: ${visualProfile.colorPalette.join(", ")}. Color mood: ${
+        visualProfile.colorMood
+      }. Style: ${visualProfile.visualStyle}. Aesthetic: ${
+        visualProfile.overallAesthetic
+      }.`
     : "";
 
   try {
@@ -603,9 +607,17 @@ Create the full prompt including: (1) the headline text to render, (2) backgroun
 
     return (
       response.text ||
-      `A bold typographic marketing graphic on a dark navy background. Large, clean sans-serif headline text reading "Innovation starts here" centered on the image. A dramatic magenta-to-blue gradient accent sweeps diagonally from the bottom-right corner. Clean, minimal poster-style layout with generous whitespace. ${platform === "Instagram" ? "Square 1:1 format." : "Landscape 1.91:1 format."}`
+      `A bold typographic marketing graphic on a dark navy background. Large, clean sans-serif headline text reading "Innovation starts here" centered on the image. A dramatic magenta-to-blue gradient accent sweeps diagonally from the bottom-right corner. Clean, minimal poster-style layout with generous whitespace. ${
+        platform === "Instagram"
+          ? "Square 1:1 format."
+          : "Landscape 1.91:1 format."
+      }`
     );
   } catch {
-    return `A bold typographic marketing graphic on a dark navy background. Large, clean sans-serif headline text reading "Innovation starts here" centered on the image. A dramatic magenta-to-blue gradient accent sweeps diagonally from the bottom-right corner. Clean, minimal poster-style layout with generous whitespace. ${platform === "Instagram" ? "Square 1:1 format." : "Landscape 1.91:1 format."}`;
+    return `A bold typographic marketing graphic on a dark navy background. Large, clean sans-serif headline text reading "Innovation starts here" centered on the image. A dramatic magenta-to-blue gradient accent sweeps diagonally from the bottom-right corner. Clean, minimal poster-style layout with generous whitespace. ${
+      platform === "Instagram"
+        ? "Square 1:1 format."
+        : "Landscape 1.91:1 format."
+    }`;
   }
 }

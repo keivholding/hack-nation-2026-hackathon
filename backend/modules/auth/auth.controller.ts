@@ -1,7 +1,12 @@
 import type { Request, Response } from "express";
 import { AuthService } from "./auth.service.js";
 import { AuthRepository } from "./auth.repository.js";
-import { brandAnalysisQueue, contentCalendarQueue, postGenerationQueue, personaGenerationQueue } from "../../services/queue.service.js";
+import {
+  brandAnalysisQueue,
+  contentCalendarQueue,
+  postGenerationQueue,
+  personaGenerationQueue,
+} from "../../services/queue.service.js";
 import { GeneratedPostsRepository } from "../content/generatedPosts.repository.js";
 import { ContentCalendarRepository } from "../content/content.repository.js";
 import { PersonaRepository } from "../content/persona.repository.js";
@@ -631,12 +636,18 @@ export class AuthController {
       }
 
       const { userId } = this.authService.verifyToken(token);
-      const calendarRows = await this.calendarRepository.getUserCalendar(userId);
+      const calendarRows = await this.calendarRepository.getUserCalendar(
+        userId
+      );
 
       // Group by day
       const calendarByDay = new Map<
         number,
-        { day: string; dayNumber: number; posts: { postNumber: number; theme: string; platform: string }[] }
+        {
+          day: string;
+          dayNumber: number;
+          posts: { postNumber: number; theme: string; platform: string }[];
+        }
       >();
 
       for (const row of calendarRows) {
@@ -794,7 +805,9 @@ export class AuthController {
 
         // Primary sort: engagement rate. Tie-breaker: weighted engagement score.
         if (bEngRate !== aEngRate) return bEngRate - aEngRate;
-        return b.engagement.totalEngagementScore - a.engagement.totalEngagementScore;
+        return (
+          b.engagement.totalEngagementScore - a.engagement.totalEngagementScore
+        );
       });
 
       res.status(200).json({
@@ -885,7 +898,9 @@ export class AuthController {
       const { postId, scheduledAt } = req.body;
 
       if (!scheduledAt) {
-        res.status(400).json({ success: false, message: "scheduledAt is required" });
+        res
+          .status(400)
+          .json({ success: false, message: "scheduledAt is required" });
         return;
       }
 
@@ -939,7 +954,9 @@ export class AuthController {
       const { feedback } = req.body;
 
       if (!feedback || !feedback.trim()) {
-        res.status(400).json({ success: false, message: "Feedback is required" });
+        res
+          .status(400)
+          .json({ success: false, message: "Feedback is required" });
         return;
       }
 
@@ -955,7 +972,13 @@ export class AuthController {
       let basePostPlatform = "";
       let originalImageUrl = "";
       let originalImageDescription = "";
-      let originalPostData: { concept: string; content: string; platform: string; imageUrl: string | null; imageDescription: string | null } | null = null;
+      let originalPostData: {
+        concept: string;
+        content: string;
+        platform: string;
+        imageUrl: string | null;
+        imageDescription: string | null;
+      } | null = null;
       let originalPostSimulations: Array<{
         personaId: string;
         liked: boolean;
@@ -968,7 +991,9 @@ export class AuthController {
 
       if (currentUser.selectedPostId) {
         const posts = await this.generatedPostsRepository.getByUserId(userId);
-        const selectedPost = posts.find((p) => p.id === currentUser.selectedPostId);
+        const selectedPost = posts.find(
+          (p) => p.id === currentUser.selectedPostId
+        );
         if (selectedPost) {
           basePostContent = selectedPost.content;
           basePostPlatform = selectedPost.platform;
@@ -983,7 +1008,9 @@ export class AuthController {
           };
 
           // Preserve the original post's simulation results
-          const sims = await this.simulationRepository.getByPostId(currentUser.selectedPostId);
+          const sims = await this.simulationRepository.getByPostId(
+            currentUser.selectedPostId
+          );
           originalPostSimulations = sims.map((s) => ({
             personaId: s.personaId,
             liked: s.liked,
@@ -1051,7 +1078,9 @@ export class AuthController {
         originalImageDescription,
       });
 
-      console.log(`Queued regeneration job for user ${userId} with feedback: ${feedback.trim()}`);
+      console.log(
+        `Queued regeneration job for user ${userId} with feedback: ${feedback.trim()}`
+      );
 
       if (!user) {
         res.status(404).json({ success: false, message: "User not found" });
@@ -1096,7 +1125,9 @@ export class AuthController {
       const { feedback } = req.body;
 
       if (!feedback || !feedback.trim()) {
-        res.status(400).json({ success: false, message: "Feedback is required" });
+        res
+          .status(400)
+          .json({ success: false, message: "Feedback is required" });
         return;
       }
 
@@ -1114,7 +1145,9 @@ export class AuthController {
       let basePostImageDescription: string | null = null;
 
       if (currentUser.selectedPostId) {
-        const post = await this.generatedPostsRepository.getById(currentUser.selectedPostId);
+        const post = await this.generatedPostsRepository.getById(
+          currentUser.selectedPostId
+        );
         if (post) {
           basePostContent = post.content;
           basePostPlatform = post.platform;
@@ -1125,7 +1158,9 @@ export class AuthController {
       }
 
       if (!basePostContent) {
-        res.status(400).json({ success: false, message: "No selected post to refine" });
+        res
+          .status(400)
+          .json({ success: false, message: "No selected post to refine" });
         return;
       }
 
@@ -1182,13 +1217,19 @@ Write ONE refined version of this post that addresses the feedback while keeping
       });
 
       // Send done event with the new post ID
-      res.write(`data: ${JSON.stringify({ done: true, postId: refinedPost.id })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({ done: true, postId: refinedPost.id })}\n\n`
+      );
       res.end();
     } catch (error) {
       console.error("Refine post streaming error:", error);
       // If headers already sent, try to send error via SSE
       if (res.headersSent) {
-        res.write(`data: ${JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" })}\n\n`);
+        res.write(
+          `data: ${JSON.stringify({
+            error: error instanceof Error ? error.message : "Unknown error",
+          })}\n\n`
+        );
         res.end();
       } else {
         res.status(500).json({
@@ -1222,7 +1263,9 @@ Write ONE refined version of this post that addresses the feedback while keeping
       const { postId, content } = req.body;
 
       if (!postId || typeof content !== "string") {
-        res.status(400).json({ success: false, message: "postId and content are required" });
+        res
+          .status(400)
+          .json({ success: false, message: "postId and content are required" });
         return;
       }
 
@@ -1233,7 +1276,10 @@ Write ONE refined version of this post that addresses the feedback while keeping
         return;
       }
 
-      const updated = await this.generatedPostsRepository.updateContent(postId, content);
+      const updated = await this.generatedPostsRepository.updateContent(
+        postId,
+        content
+      );
 
       res.status(200).json({
         success: true,

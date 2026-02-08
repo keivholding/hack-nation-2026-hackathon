@@ -425,7 +425,8 @@ export class WebScraperService {
         this.extractContent(html, currentUrl);
 
       // Skip pages with barely any content (likely error pages or empty shells)
-      if (content.trim().length < 100) {
+      // But always keep the first page even if minimal — it may have useful meta tags
+      if (content.trim().length < 100 && scrapedPages.length > 0) {
         console.log(`Skipped (too little content): ${currentUrl}`);
         continue;
       }
